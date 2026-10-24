@@ -13,6 +13,8 @@ qt_add_executable(DebugViaCom
     src/main.cpp
     src/ui/mainWindow.cpp
     src/ui/mainWindow.h
+    src/ui/logView.cpp
+    src/ui/logView.h
 )
 
 target_link_libraries(DebugViaCom
