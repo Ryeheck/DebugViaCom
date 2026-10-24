@@ -16,7 +16,7 @@ LogView::LogView(QWidget *parent)
     logText->setReadOnly(true);
     logText->document()->setMaximumBlockCount(500);
     logText->show();
-    
+
 }
 
 void LogView::log(const QString &message)
@@ -36,6 +36,17 @@ void LogView::colorLog(const QString &firstColor,  const QString &firstMessage,
                         + QString("<span style='color:%1;'>%2</span>").arg(
                         secondColor, secondMessage)
                     );
+}
+
+void LogView::clearText()
+{
+    logText->clear();
+
+}
+
+void LogView::text(const QString &message)
+{
+    logText->appendHtml(message);
 }
 
 LogView::~LogView()

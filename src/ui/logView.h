@@ -1,6 +1,7 @@
 #ifndef LOGVIEW_H
 #define LOGVIEW_H
 
+#include <qobject.h>
 #include <qplaintextedit.h>
 #include <qwidget.h>
 #include <QPlainTextEdit>
@@ -14,9 +15,12 @@ public:
     ~LogView();
 
 public slots:
-    void log(const QString &message);
+    void text(const QString &message);
+    void log( const QString &message);
     void colorLog(const QString &firstColor,  const QString &firstMessage,
                   const QString &secondColor = "", const QString &secondMessage = "");
+    
+    void clearText();  
 
 private:
     QPlainTextEdit *logText; 
