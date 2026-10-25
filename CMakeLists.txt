@@ -16,6 +16,8 @@ qt_add_executable(DebugViaCom
     src/ui/logView.cpp
     src/ui/logView.h
     src/eventBus.h
+    src/core/dataReceiver.cpp
+    src/core/dataReceiver.h
 )
 
 target_link_libraries(DebugViaCom
