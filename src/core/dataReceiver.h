@@ -2,7 +2,8 @@
 #define DATARECEIVER_H
 
 #include <qobject.h>
-#include <qwidget.h>
+#include <QSerialPort>
+#include <QSerialPortInfo>
 
 class DataReceiver : public QObject
 {
@@ -13,6 +14,7 @@ public:
     ~DataReceiver();
 
 public slots:
+    bool init();
 
 private:
 

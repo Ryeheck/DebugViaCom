@@ -1,18 +1,22 @@
 #include "dataReceiver.h"
 
-#include <QVBoxLayout>
-#include <QWidget>
-#include <qlocale.h>
+#include <QSerialPort>
+#include <QSerialPortInfo>
 #include <qobject.h>
-#include <qplaintextedit.h>
-#include <qwidget.h>
-#include <QPlainTextEdit>
-#include <QDateTime>
+#include <QDebug>
+#include <qserialport.h>
 
 DataReceiver::DataReceiver(QObject *parent) 
     : QObject(parent)
 {
 
+}
+
+bool DataReceiver::init()
+{
+    QSerialPort serial;
+
+    return true;
 }
 
 DataReceiver::~DataReceiver()
