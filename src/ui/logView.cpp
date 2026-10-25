@@ -22,20 +22,20 @@ LogView::LogView(QWidget *parent)
 void LogView::log(const QString &message)
 {
     QString time = QDateTime::currentDateTime().toString("hh:mm:ss");
-    logText->appendHtml("[" + time + "] " 
-                        + message);
+    QString qTime = "[" + time + "]";
+
+    logText->appendHtml( qTime + " " + message);
 }
 
 void LogView::colorLog(const QString &firstColor,  const QString &firstMessage,
                        const QString &secondColor, const QString &secondMessage)
 {
     QString time = QDateTime::currentDateTime().toString("hh:mm:ss");
-    logText->appendHtml("[" + time + "] "
-                        + QString("<span style='color:%1;'>%2</span>").arg(
-                        firstColor, firstMessage)
-                        + QString("<span style='color:%1;'>%2</span>").arg(
-                        secondColor, secondMessage)
-                    );
+    QString qTime = "[" + time + "]";
+    QString message = QString("<span style='color:%1;'>%2</span>").arg(firstColor, firstMessage)
+                    + QString("<span style='color:%1;'>%2</span>").arg(secondColor, secondMessage);
+
+    logText->appendHtml(qTime + " " + message);
 }
 
 void LogView::clearText()
