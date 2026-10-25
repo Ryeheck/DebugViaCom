@@ -1,7 +1,9 @@
 #include "mainWindow.h"
+#include "logView.h"
 
 #include <QVBoxLayout>
 #include <QWidget>
+#include <qpushbutton.h>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
@@ -9,8 +11,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     mainLayout    = new QVBoxLayout(centralWidget);
     setCentralWidget(centralWidget);
 
-    
-
+    logs = new LogView(this);
+    mainLayout->addWidget(logs);
 }
 
 MainWindow::~MainWindow()

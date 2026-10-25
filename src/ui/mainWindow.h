@@ -1,6 +1,8 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "logView.h"
+
 #include <QMainWindow>
 #include <qboxlayout.h>
 #include <qwidget.h>
@@ -16,6 +18,8 @@ public:
 private:
     QWidget *centralWidget;
     QVBoxLayout *mainLayout;
+
+    LogView *logs;
     
 };
 #endif // MAINWINDOW_H
