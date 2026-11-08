@@ -22,12 +22,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     QPushButton *btn = new QPushButton("Init", this);
     mainLayout->addWidget(btn);
 
-    connect(btn, &QPushButton::clicked, [this] () {
-        loader diag(this);
-        if (diag.exec() == QDialog::Accepted) {
-            // Comming soon..
-        }
-    }); 
 }
 
 MainWindow::~MainWindow()
