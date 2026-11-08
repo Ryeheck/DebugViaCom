@@ -15,7 +15,8 @@ public:
 
 public slots:
     bool init();
-
+    void existsPorts();
+    
 private:
 
 };

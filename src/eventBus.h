@@ -23,7 +23,10 @@ public:
     EventBus operator=(const EventBus &) = delete;
 
 signals:
-
+    void logging(const QString &message);
+    void colorLogging(const QString &firstColor,       const QString &firstMessage,
+                      const QString &secondColor = "", const QString &secondMessage = "");
+    void appendText(const QString &message);
 };
 
 #endif // EVENTBUS_H
