@@ -1,9 +1,11 @@
 #include "mainWindow.h"
 #include "logView.h"
 #include "../core/dataReceiver.h"
+#include "loader.h"
 
 #include <QVBoxLayout>
 #include <QWidget>
+#include <qdialog.h>
 #include <qpushbutton.h>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
@@ -20,7 +22,12 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     QPushButton *btn = new QPushButton("Init", this);
     mainLayout->addWidget(btn);
 
-    // connect(btn, &QPushButton::clicked, /* Loader */, /* Init loader */); 
+    connect(btn, &QPushButton::clicked, [this] () {
+        loader diag(this);
+        if (diag.exec() == QDialog::Accepted) {
+            // Comming soon..
+        }
+    }); 
 }
 
 MainWindow::~MainWindow()
