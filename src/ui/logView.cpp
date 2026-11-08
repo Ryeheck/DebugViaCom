@@ -3,6 +3,7 @@
 
 #include <QVBoxLayout>
 #include <QWidget>
+#include <qboxlayout.h>
 #include <qlocale.h>
 #include <qobject.h>
 #include <qplaintextedit.h>
@@ -13,9 +14,13 @@
 LogView::LogView(QWidget *parent) 
     : QWidget(parent)
 {
+    vLayout = new QVBoxLayout(this);
+    vLayout->setContentsMargins(0, 0, 0, 0);
+
     logText = new QPlainTextEdit(this);
     logText->setReadOnly(true);
     logText->document()->setMaximumBlockCount(500);
+    vLayout->addWidget(logText);
 
     connect(&EventBus::instance(), &EventBus::logging,      this, &LogView::log);
     connect(&EventBus::instance(), &EventBus::colorLogging, this, &LogView::colorLog);
