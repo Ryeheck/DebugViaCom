@@ -3,6 +3,7 @@
 
 #include <QSerialPort>
 #include <QSerialPortInfo>
+#include <qevent.h>
 #include <qobject.h>
 #include <QDebug>
 #include <qserialport.h>
@@ -35,6 +36,25 @@ bool DataReceiver::init(QSerialPortInfo &info)
 
     m_init.store(true);
     return true;
+}
+
+void DataReceiver::start()
+{
+    if (!m_init) {
+        qDebug() << "Serial not init";
+        return;
+    }
+    if (!serial->open(QIODevice::ReadOnly)) {
+        qDebug() << "Serial Couldn't open: " << serial->errorString();
+        return;
+    }
+
+    connect(serial, &QSerialPort::readyRead, [this] () {
+        QByteArray data = serial->readAll();
+        QString output = QString::fromUtf8(data);
+
+        emit EventBus::instance().logging(output);
+    });
 }
 
 DataReceiver::~DataReceiver()

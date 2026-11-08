@@ -19,7 +19,7 @@ public slots:
     bool init(QString portName, QSerialPort::BaudRate baudRate, 
               QSerialPort::DataBits dataBits, QSerialPort::StopBits stopBits);
     bool init(QSerialPortInfo &info);
-    
+    void start();
 private:
     QSerialPort *serial;
 
