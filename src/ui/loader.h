@@ -4,6 +4,7 @@
 #include <qboxlayout.h>
 #include <qcombobox.h>
 #include <qobject.h>
+#include <qserialportinfo.h>
 #include <qwidget.h>
 #include <qwindowdefs.h>
 #include <QDialog>
@@ -17,14 +18,12 @@ public:
     ~loader();
 
 public slots:
-
+    QSerialPortInfo selectedInfo();
 private:
     void refreshData();
-    void connectToPort();
 
     QVBoxLayout *mainLayout;
     QComboBox *comboPorts;
-
 };
 
 #endif // LOADER_H

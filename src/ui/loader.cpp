@@ -2,10 +2,15 @@
 
 #include <qboxlayout.h>
 #include <qcombobox.h>
+#include <qdebug.h>
+#include <qdialog.h>
 #include <qlabel.h>
+#include <qlogging.h>
 #include <qnamespace.h>
 #include <qobject.h>
 #include <qpushbutton.h>
+#include <qserialportinfo.h>
+#include <qvariant.h>
 #include <qwidget.h>
 #include <qwindowdefs.h>
 #include <QDialog>
@@ -38,7 +43,7 @@ loader::loader(QWidget *parent)
     bottomHLayout->addWidget(refreshBtn);
 
     QPushButton *connectBtn = new QPushButton("Connect", this);
-    connect(connectBtn, &QPushButton::clicked, this, &loader::connectToPort);
+    // connect(connectBtn, &QPushButton::clicked, this, /* Comming soon... */);
     bottomHLayout->addWidget(connectBtn);
 
     mainLayout->addLayout(bottomHLayout);
@@ -48,9 +53,7 @@ loader::loader(QWidget *parent)
         QDialogButtonBox::Ok | QDialogButtonBox::Cancel, 
         this);
 
-    connect(buttonBox, &QDialogButtonBox::accepted, this, [this] () {
-
-    });
+    connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
     connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 
     mainLayout->addWidget(buttonBox);
@@ -58,11 +61,13 @@ loader::loader(QWidget *parent)
 
 void loader::refreshData()
 {
+    qDebug() << "[LOADER]: Refresh";
+
     comboPorts->clear();
 
     for (const QSerialPortInfo &info : QSerialPortInfo::availablePorts())
     {
-        comboPorts->addItem(info.portName());
+        comboPorts->addItem(info.portName(), QVariant::fromValue(info));
 
         QString desc     = info.description().isEmpty()  ? "None" : info.description();
         QString manufact = info.manufacturer().isEmpty() ? "None" : info.manufacturer();
@@ -76,12 +81,14 @@ void loader::refreshData()
     }
 }
 
-void loader::connectToPort()
+QSerialPortInfo loader::selectedInfo()
 {
-
+    QSerialPortInfo info = comboPorts->currentData().value<QSerialPortInfo>();
+    qDebug() << "[LOADER]: SelectedInfo: " << info.portName();
+    return info;
 }
 
 loader::~loader()
 {
-    qDebug() << "loader destroy";
+    qDebug() << "[LOADER] destroy";
 }
