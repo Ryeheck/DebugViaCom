@@ -20,7 +20,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     QPushButton *btn = new QPushButton(this);
     mainLayout->addWidget(btn);
 
-    connect(btn, &QPushButton::clicked, receiver, &DataReceiver::existsPorts); 
 }
 
 MainWindow::~MainWindow()

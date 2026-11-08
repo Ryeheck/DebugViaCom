@@ -14,34 +14,27 @@ DataReceiver::DataReceiver(QObject *parent)
 
 }
 
-bool DataReceiver::init()
+bool DataReceiver::init(QString portName, QSerialPort::BaudRate baudRate, 
+                        QSerialPort::DataBits dataBits, QSerialPort::StopBits stopBits)
 {
-    QSerialPort serial;
+    serial = new QSerialPort(this);
+    serial->setPortName(portName);
+    serial->setBaudRate(baudRate);
+    serial->setDataBits(dataBits);
+    serial->setParity(QSerialPort::NoParity);
+    serial->setStopBits(stopBits);
+    serial->setFlowControl(QSerialPort::NoFlowControl);
 
+    m_init.store(true);
     return true;
 }
 
-
-void DataReceiver::existsPorts()
+bool DataReceiver::init(QSerialPortInfo &info)
 {
-    emit EventBus::instance().colorLogging("green", "start to find ports");
+    serial->setPort(info);
 
-    for (const QSerialPortInfo &info : QSerialPortInfo::availablePorts())
-    {
-        /*
-        QString portName = info.portName();
-        QString desc = info.description();
-        QString manufact = info.manufacturer();
-        int vendor = info.vendorIdentifier();
-        int product = info.productIdentifier();
-        */
-
-        emit EventBus::instance().logging(QString("port: %1").arg(info.portName())); 
-        emit EventBus::instance().logging(QString("description: %1").arg(info.description()));
-        emit EventBus::instance().logging(QString("manufactur: %1").arg(info.manufacturer()));
-        emit EventBus::instance().logging(QString("vendor: %1").arg(info.vendorIdentifier()));
-        emit EventBus::instance().logging(QString("product: %1").arg(info.productIdentifier()));
-    }
+    m_init.store(true);
+    return true;
 }
 
 DataReceiver::~DataReceiver()
