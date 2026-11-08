@@ -1,6 +1,7 @@
 #ifndef LOGVIEW_H
 #define LOGVIEW_H
 
+#include <qboxlayout.h>
 #include <qobject.h>
 #include <qplaintextedit.h>
 #include <qwidget.h>
@@ -23,6 +24,7 @@ public slots:
     void clearText();  
 
 private:
+    QVBoxLayout *vLayout;
     QPlainTextEdit *logText; 
 };
 
