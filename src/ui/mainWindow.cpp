@@ -7,7 +7,6 @@
 #include <QWidget>
 #include <qdialog.h>
 #include <qpushbutton.h>
-#include <qserialportinfo.h>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
