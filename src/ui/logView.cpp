@@ -1,4 +1,5 @@
 #include "logView.h"
+#include "../eventBus.h"
 
 #include <QVBoxLayout>
 #include <QWidget>
@@ -15,8 +16,10 @@ LogView::LogView(QWidget *parent)
     logText = new QPlainTextEdit(this);
     logText->setReadOnly(true);
     logText->document()->setMaximumBlockCount(500);
-    logText->show();
 
+    connect(&EventBus::instance(), &EventBus::logging,      this, &LogView::log);
+    connect(&EventBus::instance(), &EventBus::colorLogging, this, &LogView::colorLog);
+    connect(&EventBus::instance(), &EventBus::appendText,   this, &LogView::text);
 }
 
 void LogView::log(const QString &message)

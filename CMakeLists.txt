@@ -4,6 +4,7 @@ project(DebugViaCom LANGUAGES CXX)
 find_package(Qt6 6.5 REQUIRED COMPONENTS 
     Core 
     Widgets
+    SerialPort
 )
 
 qt_standard_project_setup()
@@ -16,12 +17,15 @@ qt_add_executable(DebugViaCom
     src/ui/logView.cpp
     src/ui/logView.h
     src/eventBus.h
+    src/core/dataReceiver.cpp
+    src/core/dataReceiver.h
 )
 
 target_link_libraries(DebugViaCom
     PRIVATE
         Qt::Core
         Qt::Widgets
+        Qt::SerialPort
 )
 
 include(GNUInstallDirs)
