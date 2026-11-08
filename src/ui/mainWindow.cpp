@@ -17,7 +17,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
     DataReceiver *receiver = new DataReceiver(this);
     
-    QPushButton *btn = new QPushButton(this);
+    QPushButton *btn = new QPushButton("Init", this);
     mainLayout->addWidget(btn);
 
 }
