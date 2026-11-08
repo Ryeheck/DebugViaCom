@@ -1,9 +1,11 @@
 #include "mainWindow.h"
 #include "logView.h"
 #include "../core/dataReceiver.h"
+#include "loader.h"
 
 #include <QVBoxLayout>
 #include <QWidget>
+#include <qdialog.h>
 #include <qpushbutton.h>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
