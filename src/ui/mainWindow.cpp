@@ -7,6 +7,7 @@
 #include <QWidget>
 #include <qdialog.h>
 #include <qpushbutton.h>
+#include <qserialportinfo.h>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
@@ -22,12 +23,13 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     QPushButton *btn = new QPushButton("Init", this);
     mainLayout->addWidget(btn);
 
-    connect(btn, &QPushButton::clicked, [this] () {
+    connect(btn, &QPushButton::clicked, [this, receiver] () {
         loader diag(this);
         if (diag.exec() == QDialog::Accepted) {
-            // Comming soon..
+            QSerialPortInfo info = diag.selectedInfo();
+            receiver->init(info);
         }
-    }); 
+    });
 }
 
 MainWindow::~MainWindow()
