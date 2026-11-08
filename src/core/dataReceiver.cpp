@@ -32,6 +32,12 @@ bool DataReceiver::init(QString portName, QSerialPort::BaudRate baudRate,
 
 bool DataReceiver::init(QSerialPortInfo &info)
 {
+    if (info.isNull()) {
+        qDebug() << "info is NULL";
+        return false;
+    }
+    
+    serial = new QSerialPort(this);
     serial->setPort(info);
 
     m_init.store(true);
