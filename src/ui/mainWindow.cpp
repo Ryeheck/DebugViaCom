@@ -2,9 +2,11 @@
 #include "logView.h"
 #include "../core/dataReceiver.h"
 #include "loader.h"
+#include "loader.h"
 
 #include <QVBoxLayout>
 #include <QWidget>
+#include <qdialog.h>
 #include <qdialog.h>
 #include <qpushbutton.h>
 
