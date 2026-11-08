@@ -17,10 +17,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
     DataReceiver *receiver = new DataReceiver(this);
     
-    QPushButton *btn = new QPushButton(this);
+    QPushButton *btn = new QPushButton("Init", this);
     mainLayout->addWidget(btn);
 
-    connect(btn, &QPushButton::clicked, receiver, &DataReceiver::existsPorts); 
+    // connect(btn, &QPushButton::clicked, /* Loader */, /* Init loader */); 
 }
 
 MainWindow::~MainWindow()
