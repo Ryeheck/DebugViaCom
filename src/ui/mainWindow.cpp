@@ -28,9 +28,13 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
         if (diag.exec() == QDialog::Accepted) {
             info selectedInfo = diag.selectedInfo();
             
-            // receiver->init(info);
+            receiver->init(selectedInfo);
         }
     });
+
+    QPushButton *startBtn = new QPushButton("Start", this);
+    connect(startBtn, &QPushButton::clicked, receiver, &DataReceiver::start);
+    mainLayout->addWidget(startBtn);
 }
 
 MainWindow::~MainWindow()
