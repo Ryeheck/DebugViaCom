@@ -26,7 +26,7 @@ loader::loader(QWidget *parent)
     : QDialog(parent)
 {
     mainLayout = new QVBoxLayout(this);
-    QFormLayout *form = new QFormLayout(this);
+    QFormLayout *form = new QFormLayout();
     mainLayout->addLayout(form);
 
     // Ports
