@@ -1,39 +1,79 @@
 #include "loader.h"
 
 #include <qboxlayout.h>
+#include <initializer_list>
 #include <qcombobox.h>
 #include <qdebug.h>
 #include <qdialog.h>
+#include <qformlayout.h>
 #include <qlabel.h>
 #include <qlogging.h>
-#include <qnamespace.h>
 #include <qobject.h>
 #include <qpushbutton.h>
+#include <qserialport.h>
 #include <qserialportinfo.h>
-#include <qvariant.h>
 #include <qwidget.h>
-#include <qwindowdefs.h>
 #include <QDialog>
 #include <QComboBox>
 #include <QDialogButtonBox>
 #include <QLabel>
 #include <QSerialPortInfo>
 #include <QString>
+#include <QFormLayout>
+#include <utility>
 
 loader::loader(QWidget *parent)
     : QDialog(parent)
 {
     mainLayout = new QVBoxLayout(this);
-    
+    QFormLayout *form = new QFormLayout(this);
+    mainLayout->addLayout(form);
+
     // Ports
-    QHBoxLayout *portsHLayout = new QHBoxLayout();
-    QLabel *portsLabel = new QLabel("Port: ", this);
-    portsHLayout->addWidget(portsLabel);
+    comboPorts = makeCombo(this, form, "Ports:");
 
-    comboPorts = new QComboBox(this);
-    portsHLayout->addWidget(comboPorts);
+    // Baud rate
+    comboBaudRate = makeCombo(this, form, "Baud rate:", {
+        {"115200", QSerialPort::Baud115200},
+        {"57600",  QSerialPort::Baud57600},
+        {"38400",  QSerialPort::Baud38400},
+        {"19200",  QSerialPort::Baud19200},
+        {"9600",   QSerialPort::Baud9600},
+        {"4800",   QSerialPort::Baud4800},
+        {"2400",   QSerialPort::Baud2400},
+        {"1200",   QSerialPort::Baud1200}
+    });
+    
+    // Data bits
+    comboDataBits = makeCombo(this, form, "Data bits:", {
+        {"8", QSerialPort::Data8},
+        {"7", QSerialPort::Data7},
+        {"6", QSerialPort::Data6},
+        {"5", QSerialPort::Data5}
+    });
 
-    mainLayout->addLayout(portsHLayout);
+    // Parity
+    comboParity = makeCombo(this, form, "Parity:", {
+        {"No",    QSerialPort::NoParity},
+        {"Even",  QSerialPort::EvenParity},
+        {"Odd",   QSerialPort::OddParity},
+        {"Space", QSerialPort::SpaceParity},
+        {"Mark",  QSerialPort::MarkParity},
+    });
+
+    // Stop bits
+    comboStopBits = makeCombo(this, form, "Stop bits:", {
+        {"1",       QSerialPort::OneStop},
+        {"1 & 0.5", QSerialPort::OneAndHalfStop},
+        {"2",       QSerialPort::TwoStop}
+    });
+
+    // Flow Control
+    comboFlowControl = makeCombo(this, form, "Flow control:", {
+        {"No control",       QSerialPort::NoFlowControl},
+        {"Hardware control", QSerialPort::HardwareControl},
+        {"Software control", QSerialPort::SoftwareControl}
+    });
 
     /* Buttons */
     // Bottom
@@ -79,6 +119,17 @@ void loader::refreshData()
              QString::number(info.productIdentifier()));
         comboPorts->setItemData(idx, tip, Qt::ToolTipRole);
     }
+}
+
+QComboBox *loader::makeCombo(QWidget *parent, QFormLayout *form, const QString &label,
+                     std::initializer_list<std::pair<QString, int>> items)
+{
+    QComboBox *combo = new QComboBox(parent);
+    for (const auto &[name, value] : items)
+        combo->addItem(name, value);
+    form->addRow(label, combo);
+    
+    return combo;
 }
 
 QSerialPortInfo loader::selectedInfo()
