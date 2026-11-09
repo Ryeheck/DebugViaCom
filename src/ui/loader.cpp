@@ -107,7 +107,7 @@ void loader::refreshData()
 
     for (const QSerialPortInfo &info : QSerialPortInfo::availablePorts())
     {
-        comboPorts->addItem(info.portName(), QVariant::fromValue(info));
+        comboPorts->addItem(info.portName());
 
         QString desc     = info.description().isEmpty()  ? "None" : info.description();
         QString manufact = info.manufacturer().isEmpty() ? "None" : info.manufacturer();
@@ -132,11 +132,19 @@ QComboBox *loader::makeCombo(QWidget *parent, QFormLayout *form, const QString &
     return combo;
 }
 
-QSerialPortInfo loader::selectedInfo()
+info loader::selectedInfo()
 {
-    QSerialPortInfo info = comboPorts->currentData().value<QSerialPortInfo>();
-    qDebug() << "[LOADER]: SelectedInfo: " << info.portName();
-    return info;
+    info selectedInfo;
+    selectedInfo.portName = comboPorts->currentText();
+    
+    selectedInfo.flowControl = static_cast<QSerialPort::FlowControl>(comboFlowControl->currentData().toInt());
+    selectedInfo.baudRate    = static_cast<QSerialPort::BaudRate>(comboBaudRate->currentData().toInt());
+    selectedInfo.dataBits    = static_cast<QSerialPort::DataBits>(comboDataBits->currentData().toInt());
+    selectedInfo.stopBits    = static_cast<QSerialPort::StopBits>(comboStopBits->currentData().toInt());
+    selectedInfo.parity      = static_cast<QSerialPort::Parity>(comboParity->currentData().toInt());
+    
+    qDebug() << "[LOADER]: info:" << selectedInfo.portName;
+    return selectedInfo;
 }
 
 loader::~loader()

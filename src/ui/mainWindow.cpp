@@ -26,8 +26,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     connect(btn, &QPushButton::clicked, [this, receiver] () {
         loader diag(this);
         if (diag.exec() == QDialog::Accepted) {
-            QSerialPortInfo info = diag.selectedInfo();
-            receiver->init(info);
+            info selectedInfo = diag.selectedInfo();
+            
+            // receiver->init(info);
         }
     });
 }
