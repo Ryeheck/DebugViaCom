@@ -12,6 +12,16 @@
 #include <QSerialPort>
 #include <QFormLayout>
 
+struct info {
+    QString portName;
+
+    QSerialPort::BaudRate    baudRate;
+    QSerialPort::DataBits    dataBits;
+    QSerialPort::StopBits    stopBits;
+    QSerialPort::FlowControl flowControl;
+    QSerialPort::Parity      parity;
+};
+
 class loader : public QDialog
 {
     Q_OBJECT
@@ -31,7 +41,6 @@ private:
     QComboBox *comboPorts;
     QComboBox *comboBaudRate;
     QComboBox *comboFlowControl;
-    QComboBox *stopBitsRate;
     QComboBox *comboStopBits;
     QComboBox *comboParity;
     QComboBox *comboDataBits;
