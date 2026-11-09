@@ -31,7 +31,7 @@ public:
     ~loader();
 
 public slots:
-    QSerialPortInfo selectedInfo();
+    info selectedInfo();
 private:
     void refreshData();
     QComboBox *makeCombo(QWidget *parent, QFormLayout *form, const QString &label,
