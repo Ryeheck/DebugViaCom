@@ -1,9 +1,11 @@
 #include "dataReceiver.h"
 #include "../eventBus.h"
+#include "../ui/loader.h"
 
 #include <QSerialPort>
 #include <QSerialPortInfo>
 #include <qevent.h>
+#include <qlogging.h>
 #include <qobject.h>
 #include <QDebug>
 #include <qserialport.h>
@@ -15,18 +17,18 @@ DataReceiver::DataReceiver(QObject *parent)
 
 }
 
-bool DataReceiver::init(QString portName, QSerialPort::BaudRate baudRate, 
-                        QSerialPort::DataBits dataBits, QSerialPort::StopBits stopBits)
+bool DataReceiver::init(info setting)
 {
     serial = new QSerialPort(this);
-    serial->setPortName(portName);
-    serial->setBaudRate(baudRate);
-    serial->setDataBits(dataBits);
-    serial->setParity(QSerialPort::NoParity);
-    serial->setStopBits(stopBits);
-    serial->setFlowControl(QSerialPort::NoFlowControl);
+    serial->setPortName(setting.portName);
+    serial->setBaudRate(setting.baudRate);
+    serial->setDataBits(setting.dataBits);
+    serial->setParity(setting.parity);
+    serial->setStopBits(setting.stopBits);
+    serial->setFlowControl(setting.flowControl);
 
     m_init.store(true);
+    qDebug() << "[DATARECEIVER] initialize";
     return true;
 }
 
@@ -41,6 +43,7 @@ bool DataReceiver::init(QSerialPortInfo &info)
     serial->setPort(info);
 
     m_init.store(true);
+    qDebug() << "[DATARECEIVER] initialize";
     return true;
 }
 
