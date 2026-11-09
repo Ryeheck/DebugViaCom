@@ -1,6 +1,8 @@
 #ifndef DATARECEIVER_H
 #define DATARECEIVER_H
 
+#include "../ui/loader.h"
+
 #include <atomic>
 #include <qobject.h>
 #include <QSerialPort>
@@ -16,8 +18,7 @@ public:
     ~DataReceiver();
 
 public slots:
-    bool init(QString portName, QSerialPort::BaudRate baudRate, 
-              QSerialPort::DataBits dataBits, QSerialPort::StopBits stopBits);
+    bool init(info setting);
     bool init(QSerialPortInfo &info);
     void start();
 private:
