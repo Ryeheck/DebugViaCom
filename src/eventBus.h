@@ -32,6 +32,7 @@ signals:
     void connectToPort(QSerialPortInfo &info);
     void connectToPort(QString portName, QSerialPort::BaudRate baudRate, 
                        QSerialPort::DataBits dataBits, QSerialPort::StopBits stopBits);
+    void acceptText(const QString &message);
 };
 
 #endif // EVENTBUS_H
