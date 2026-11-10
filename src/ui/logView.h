@@ -32,6 +32,7 @@ public slots:
 private:
     QVBoxLayout *vLayout;
     QPlainTextEdit *logText; 
+    QPlainTextEdit *editText;
 };
 
 #endif // LOGVIEW_H

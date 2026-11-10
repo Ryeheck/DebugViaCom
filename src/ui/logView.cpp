@@ -17,6 +17,11 @@ LogView::LogView(QWidget *parent)
     vLayout = new QVBoxLayout(this);
     vLayout->setContentsMargins(0, 0, 0, 0);
 
+    editText = new QPlainTextEdit(this);
+    editText->setReadOnly(true);
+    editText->document()->setMaximumBlockCount(500);
+    vLayout->addWidget(editText);
+
     logText = new QPlainTextEdit(this);
     logText->setReadOnly(true);
     logText->document()->setMaximumBlockCount(500);
@@ -51,18 +56,19 @@ void LogView::colorLog(const QString &firstColor,  const QString &firstMessage,
 void LogView::clearText()
 {
     logText->clear();
-
+    editText->clear();
 }
 
 void LogView::appendText(const QString &message)
 {
-    logText->appendHtml(message);
+    QString text = QString("<span style='color:silver;'>%1</span>").arg(message);
+    editText->appendHtml(text);
 }
 
 void LogView::acceptText(const QString &message)
 {
-    logText->moveCursor(QTextCursor::End);
-    logText->insertPlainText(message);
+    editText->moveCursor(QTextCursor::End);
+    editText->insertPlainText(message);
 }
 
 LogView::~LogView()
