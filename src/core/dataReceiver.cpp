@@ -54,9 +54,7 @@ void DataReceiver::start()
         qDebug() << "Serial Couldn't open: " << serial->errorString();
         return;
     }
-    emit EventBus::instance().colorLogging("silver", 
-                                           QString("Accept text from: %1").arg(serial->portName()));
-    
+
     connect(serial, &QSerialPort::readyRead, [this] () {
         QByteArray data = serial->readAll();
         QString output = QString::fromUtf8(data);
