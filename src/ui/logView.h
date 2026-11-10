@@ -16,11 +16,11 @@ public:
     ~LogView();
 
 public slots:
-    void text(const QString &message);
+    void appendText(const QString &message);
     void log( const QString &message);
     void colorLog(const QString &firstColor,  const QString &firstMessage,
                   const QString &secondColor = "", const QString &secondMessage = "");
-    
+    void acceptText(const QString &message);
     void clearText();  
 
 private:

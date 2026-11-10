@@ -24,7 +24,8 @@ LogView::LogView(QWidget *parent)
 
     connect(&EventBus::instance(), &EventBus::logging,      this, &LogView::log);
     connect(&EventBus::instance(), &EventBus::colorLogging, this, &LogView::colorLog);
-    connect(&EventBus::instance(), &EventBus::appendText,   this, &LogView::text);
+    connect(&EventBus::instance(), &EventBus::appendText,   this, &LogView::appendText);
+    connect(&EventBus::instance(), &EventBus::acceptText,   this, &LogView::acceptText);
 }
 
 void LogView::log(const QString &message)
@@ -52,9 +53,15 @@ void LogView::clearText()
 
 }
 
-void LogView::text(const QString &message)
+void LogView::appendText(const QString &message)
 {
     logText->appendHtml(message);
+}
+
+void LogView::acceptText(const QString &message)
+{
+    logText->moveCursor(QTextCursor::End);
+    logText->insertPlainText(message);
 }
 
 LogView::~LogView()
