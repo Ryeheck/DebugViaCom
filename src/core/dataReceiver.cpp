@@ -59,7 +59,7 @@ void DataReceiver::start()
         QByteArray data = serial->readAll();
         QString output = QString::fromUtf8(data);
 
-        emit EventBus::instance().logging(output);
+        emit EventBus::instance().acceptText(output);
     });
 }
 

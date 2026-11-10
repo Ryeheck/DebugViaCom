@@ -24,26 +24,28 @@ LogView::LogView(QWidget *parent)
 
     connect(&EventBus::instance(), &EventBus::logging,      this, &LogView::log);
     connect(&EventBus::instance(), &EventBus::colorLogging, this, &LogView::colorLog);
-    connect(&EventBus::instance(), &EventBus::appendText,   this, &LogView::text);
+    connect(&EventBus::instance(), &EventBus::appendText,   this, &LogView::appendText);
+    connect(&EventBus::instance(), &EventBus::acceptText,   this, &LogView::acceptText);
 }
 
-void LogView::log(const QString &message)
+void LogView::log(typeLog type, const QString &from, const QString &text)
 {
-    QString time = QDateTime::currentDateTime().toString("hh:mm:ss");
-    QString qTime = "[" + time + "]";
-
-    logText->appendHtml( qTime + " " + message);
+    QString time = "[" + QDateTime::currentDateTime().toString("hh:mm:ss") + "]";
+    QString color = type ? (type == 2 ? "DarkSeaGreen" : "silver") : "IndianRed";
+    QString message = QString("<span style='color:silver;'>[%1]: </span>").arg(from)
+                    + QString("<span style='color:%1;'>%2 </span>").arg(color, text);
+    
+    logText->appendHtml(time + " " + message);
 }
 
 void LogView::colorLog(const QString &firstColor,  const QString &firstMessage,
                        const QString &secondColor, const QString &secondMessage)
 {
-    QString time = QDateTime::currentDateTime().toString("hh:mm:ss");
-    QString qTime = "[" + time + "]";
+    QString time = "[" + QDateTime::currentDateTime().toString("hh:mm:ss") + "]";
     QString message = QString("<span style='color:%1;'>%2</span>").arg(firstColor, firstMessage)
                     + QString("<span style='color:%1;'>%2</span>").arg(secondColor, secondMessage);
 
-    logText->appendHtml(qTime + " " + message);
+    logText->appendHtml(time + " " + message);
 }
 
 void LogView::clearText()
@@ -52,9 +54,15 @@ void LogView::clearText()
 
 }
 
-void LogView::text(const QString &message)
+void LogView::appendText(const QString &message)
 {
     logText->appendHtml(message);
+}
+
+void LogView::acceptText(const QString &message)
+{
+    logText->moveCursor(QTextCursor::End);
+    logText->insertPlainText(message);
 }
 
 LogView::~LogView()

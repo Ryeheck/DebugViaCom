@@ -1,6 +1,8 @@
 #ifndef EVENTBUS_H
 #define EVENTBUS_H
 
+#include "ui/logView.h"
+
 #include <qobject.h>
 #include <qserialportinfo.h>
 #include <QSerialPort>
@@ -25,13 +27,14 @@ public:
     EventBus operator=(const EventBus &) = delete;
 
 signals:
-    void logging(const QString &message);
+    void logging(typeLog type, const QString &from, const QString &message);
     void colorLogging(const QString &firstColor,       const QString &firstMessage,
                       const QString &secondColor = "", const QString &secondMessage = "");
     void appendText(const QString &message);
     void connectToPort(QSerialPortInfo &info);
     void connectToPort(QString portName, QSerialPort::BaudRate baudRate, 
                        QSerialPort::DataBits dataBits, QSerialPort::StopBits stopBits);
+    void acceptText(const QString &message);
 };
 
 #endif // EVENTBUS_H
