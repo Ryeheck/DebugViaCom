@@ -1,4 +1,6 @@
 #include "loader.h"
+#include "../eventBus.h"
+#include "logView.h"
 
 #include <qboxlayout.h>
 #include <initializer_list>
@@ -101,8 +103,9 @@ loader::loader(QWidget *parent)
 
 void loader::refreshData()
 {
-    qDebug() << "[LOADER]: Refresh";
-
+    emit EventBus::instance().logging(typeLog::simple, 
+                                      "Loader", "Refresh");
+    
     comboPorts->clear();
 
     for (const QSerialPortInfo &info : QSerialPortInfo::availablePorts())
@@ -143,7 +146,8 @@ info loader::selectedInfo()
     selectedInfo.stopBits    = static_cast<QSerialPort::StopBits>(comboStopBits->currentData().toInt());
     selectedInfo.parity      = static_cast<QSerialPort::Parity>(comboParity->currentData().toInt());
     
-    qDebug() << "[LOADER]: info:" << selectedInfo.portName;
+    emit EventBus::instance().logging(typeLog::simple, 
+                                      "Loader", QString("info: %1").arg(selectedInfo.portName));
     return selectedInfo;
 }
 
