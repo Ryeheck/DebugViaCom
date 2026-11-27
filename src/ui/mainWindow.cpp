@@ -2,9 +2,11 @@
 #include "logView.h"
 #include "../core/dataReceiver.h"
 #include "loader.h"
+#include "loader.h"
 
 #include <QVBoxLayout>
 #include <QWidget>
+#include <qdialog.h>
 #include <qdialog.h>
 #include <qpushbutton.h>
 #include <qserialportinfo.h>
@@ -26,10 +28,15 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     connect(btn, &QPushButton::clicked, [this, receiver] () {
         loader diag(this);
         if (diag.exec() == QDialog::Accepted) {
-            QSerialPortInfo info = diag.selectedInfo();
-            receiver->init(info);
+            info selectedInfo = diag.selectedInfo();
+            
+            receiver->init(selectedInfo);
         }
     });
+
+    QPushButton *startBtn = new QPushButton("Start", this);
+    connect(startBtn, &QPushButton::clicked, receiver, &DataReceiver::start);
+    mainLayout->addWidget(startBtn);
 }
 
 MainWindow::~MainWindow()

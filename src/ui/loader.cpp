@@ -1,39 +1,81 @@
 #include "loader.h"
+#include "../eventBus.h"
+#include "logView.h"
 
 #include <qboxlayout.h>
+#include <initializer_list>
 #include <qcombobox.h>
 #include <qdebug.h>
 #include <qdialog.h>
+#include <qformlayout.h>
 #include <qlabel.h>
 #include <qlogging.h>
-#include <qnamespace.h>
 #include <qobject.h>
 #include <qpushbutton.h>
+#include <qserialport.h>
 #include <qserialportinfo.h>
-#include <qvariant.h>
 #include <qwidget.h>
-#include <qwindowdefs.h>
 #include <QDialog>
 #include <QComboBox>
 #include <QDialogButtonBox>
 #include <QLabel>
 #include <QSerialPortInfo>
 #include <QString>
+#include <QFormLayout>
+#include <utility>
 
 loader::loader(QWidget *parent)
     : QDialog(parent)
 {
     mainLayout = new QVBoxLayout(this);
-    
+    QFormLayout *form = new QFormLayout();
+    mainLayout->addLayout(form);
+
     // Ports
-    QHBoxLayout *portsHLayout = new QHBoxLayout();
-    QLabel *portsLabel = new QLabel("Port: ", this);
-    portsHLayout->addWidget(portsLabel);
+    comboPorts = makeCombo(this, form, "Ports:");
 
-    comboPorts = new QComboBox(this);
-    portsHLayout->addWidget(comboPorts);
+    // Baud rate
+    comboBaudRate = makeCombo(this, form, "Baud rate:", {
+        {"115200", QSerialPort::Baud115200},
+        {"57600",  QSerialPort::Baud57600},
+        {"38400",  QSerialPort::Baud38400},
+        {"19200",  QSerialPort::Baud19200},
+        {"9600",   QSerialPort::Baud9600},
+        {"4800",   QSerialPort::Baud4800},
+        {"2400",   QSerialPort::Baud2400},
+        {"1200",   QSerialPort::Baud1200}
+    });
+    
+    // Data bits
+    comboDataBits = makeCombo(this, form, "Data bits:", {
+        {"8", QSerialPort::Data8},
+        {"7", QSerialPort::Data7},
+        {"6", QSerialPort::Data6},
+        {"5", QSerialPort::Data5}
+    });
 
-    mainLayout->addLayout(portsHLayout);
+    // Parity
+    comboParity = makeCombo(this, form, "Parity:", {
+        {"No",    QSerialPort::NoParity},
+        {"Even",  QSerialPort::EvenParity},
+        {"Odd",   QSerialPort::OddParity},
+        {"Space", QSerialPort::SpaceParity},
+        {"Mark",  QSerialPort::MarkParity},
+    });
+
+    // Stop bits
+    comboStopBits = makeCombo(this, form, "Stop bits:", {
+        {"1",       QSerialPort::OneStop},
+        {"1 & 0.5", QSerialPort::OneAndHalfStop},
+        {"2",       QSerialPort::TwoStop}
+    });
+
+    // Flow Control
+    comboFlowControl = makeCombo(this, form, "Flow control:", {
+        {"No control",       QSerialPort::NoFlowControl},
+        {"Hardware control", QSerialPort::HardwareControl},
+        {"Software control", QSerialPort::SoftwareControl}
+    });
 
     /* Buttons */
     // Bottom
@@ -61,13 +103,14 @@ loader::loader(QWidget *parent)
 
 void loader::refreshData()
 {
-    qDebug() << "[LOADER]: Refresh";
-
+    emit EventBus::instance().logging(typeLog::simple, 
+                                      "Loader", "Refresh");
+    
     comboPorts->clear();
 
     for (const QSerialPortInfo &info : QSerialPortInfo::availablePorts())
     {
-        comboPorts->addItem(info.portName(), QVariant::fromValue(info));
+        comboPorts->addItem(info.portName());
 
         QString desc     = info.description().isEmpty()  ? "None" : info.description();
         QString manufact = info.manufacturer().isEmpty() ? "None" : info.manufacturer();
@@ -81,11 +124,31 @@ void loader::refreshData()
     }
 }
 
-QSerialPortInfo loader::selectedInfo()
+QComboBox *loader::makeCombo(QWidget *parent, QFormLayout *form, const QString &label,
+                     std::initializer_list<std::pair<QString, int>> items)
 {
-    QSerialPortInfo info = comboPorts->currentData().value<QSerialPortInfo>();
-    qDebug() << "[LOADER]: SelectedInfo: " << info.portName();
-    return info;
+    QComboBox *combo = new QComboBox(parent);
+    for (const auto &[name, value] : items)
+        combo->addItem(name, value);
+    form->addRow(label, combo);
+    
+    return combo;
+}
+
+info loader::selectedInfo()
+{
+    info selectedInfo;
+    selectedInfo.portName = comboPorts->currentText();
+    
+    selectedInfo.flowControl = static_cast<QSerialPort::FlowControl>(comboFlowControl->currentData().toInt());
+    selectedInfo.baudRate    = static_cast<QSerialPort::BaudRate>(comboBaudRate->currentData().toInt());
+    selectedInfo.dataBits    = static_cast<QSerialPort::DataBits>(comboDataBits->currentData().toInt());
+    selectedInfo.stopBits    = static_cast<QSerialPort::StopBits>(comboStopBits->currentData().toInt());
+    selectedInfo.parity      = static_cast<QSerialPort::Parity>(comboParity->currentData().toInt());
+    
+    emit EventBus::instance().logging(typeLog::simple, 
+                                      "Loader", QString("info: %1").arg(selectedInfo.portName));
+    return selectedInfo;
 }
 
 loader::~loader()
